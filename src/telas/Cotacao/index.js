@@ -1,66 +1,70 @@
-import React, { useState } from "react";
-import { View, Text, SafeAreaView, TextInput, Button } from "react-native";
+import React, { useCallback, useState } from "react";
+import { View, Text, SafeAreaView, TextInput, Button, TouchableOpacity } from "react-native";
 import styles from "./style";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initDB, getVariaveis, updateVariaveis, createVariaveis, obterUltimoId, getAllVariaveis, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Cotacao({ navigation }) {
 
-    const [preco, setPreco] = useState('');
-    const [area, setArea] = useState('');
+    const [novoCustoFerro, setNovoCustoFerro] = useState('')
+    const [novoCustoDiaTrabalho, setNovoCustoDiaTrabalho] = useState('')
+    const [custoFerro, setCustoFerro] = useState('')
+    const [custoDiaTrabalho, setCustoDiaTrabalho] = useState('')
 
-
-    getMultiple = async () => {
-        let values
+    const carregarVariaveisSalvas = async () => {
         try {
-            values = await AsyncStorage.multiGet(['preco', 'area'])
-            setPreco(values[0][1])
-            setArea(values[1][1])
-        } catch (e) {
-            console.log(e)
+            id = await obterUltimoIdVariaveis()
+            dados = await getVariaveis(id)
+            setCustoDiaTrabalho(dados[0].custo_dia_obra)
+            setCustoFerro(dados[0].custo_ferro )          
+        } catch (error) {
+            console.log("Erro ao carregar Variaveis: ", error)
         }
-        console.log(values)
-
     }
+    
+    useFocusEffect(
+        useCallback(() => {
+            carregarVariaveisSalvas();
+        }, [])
+    );
 
-
-    multiSet = async () => {
-        const firstPair = ["preco", preco]
-        const secondPair = ["area", area]
-        try {
-            await AsyncStorage.multiSet([firstPair, secondPair])
-        } catch (e) {
-            console.log(e)
+    const salvarDados = async () => {
+        if (!initDB) {
+            console.log('banco de dados não inicializado!')
+        } else {
+            try {
+                await createVariaveis(novoCustoFerro, novoCustoDiaTrabalho);
+                navigation.goBack();
+            } catch (error) {
+                console.log("Erro ao atualizar Variaveis: ", error)
+            }
         }
     }
 
     return (
         <SafeAreaView>
-            <Text> Cotação do Ferro no dia:</Text>
-            <TextInput style={styles.textInput}
-                placeholder="Preço"
-                keyboardType="decimal-pad"
-                onChangeText={setPreco}
-                value={preco}
-            />
+            <Text> Cotação do Quilo do Ferro Salvo: {custoFerro}</Text>
+            <View>
+                <Text>Novo Valor do Quilo a ser Salvo:</Text>
+                <TextInput style={styles.textInput}
+                    keyboardType="decimal-pad"
+                    onChangeText={setNovoCustoFerro}
+                    value={novoCustoFerro}
+                />
+            </View>
 
-            <Text> Área em metros de fundação</Text>
-            <TextInput style={styles.textInput}
-                placeholder="Área total"
-                keyboardType="decimal-pad"
-                onChangeText={setArea}
-                value={area}
-            />
-            <Button
-                title="Utilizar variáveis"
-                onPress={() => {
-                    multiSet(),
-                    navigation.navigate('Calculos', {
-                        preco: preco,
-                        area: area
-
-                    });
-                }}
-            />
+            <Text> Valor do dia de Trabalho: {custoDiaTrabalho}</Text>
+            <View>
+                <Text>Novo Valor de Dia de Trabalho a ser Salvo:</Text>
+                <TextInput style={styles.textInput}
+                    keyboardType="decimal-pad"
+                    onChangeText={setNovoCustoDiaTrabalho}
+                    value={novoCustoDiaTrabalho}
+                />
+            </View>
+            <TouchableOpacity onPress={() => salvarDados()}>
+                <Text>Salvar Dados Inseridos</Text>
+            </TouchableOpacity>
         </SafeAreaView>
     )
 }
