@@ -29,7 +29,7 @@ export default function Routes() {
           headerTitleAlign: "center"
         }}>
         <Stack.Screen name="TelaInicial" component={TelaInicial} options={{ title: 'Lista de Projetos' }} />
-        <Stack.Screen name="DetalhesProjetos" component={Detalhes} options={{ title: 'Detalhamento de Projeto' }} />
+        <Stack.Screen name="Detalhes" component={Detalhes} options={{ title: 'Detalhamento de Projeto' }} />
         <Stack.Screen name="NovoProjeto" component={NovoProjeto} options={{ title: 'Cadastro de Novo Projeto' }} />
         <Stack.Screen name="Cotacao" component={Cotacao} options={{ title: 'Cotações Atuais'}}/>
       </Stack.Navigator>

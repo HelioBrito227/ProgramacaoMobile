@@ -50,7 +50,7 @@ export const getProjeto = async (id) => {
         db.transaction(tx => {
             tx.executeSql("SELECT * FROM projetos WHERE id =?", [id], (_, { rows }) => {
                 if (rows.length > 0) {
-                    resolve(rows._array);
+                    resolve(rows._array[0]);
                 } else {
                     resolve([]);
                 }
