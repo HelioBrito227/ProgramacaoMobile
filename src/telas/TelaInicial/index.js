@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
-import { Text, TouchableOpacity, View, ActivityIndicator, FlatList } from "react-native";
+import { Text, TouchableOpacity, View, ActivityIndicator, FlatList, SafeAreaView } from "react-native";
 import { useFocusEffect } from '@react-navigation/native'
 import { Card } from "react-native-elements";
-import { getProjeto } from "../../dataBase/SQLiteManager";
+import { getProjetos } from "../../dataBase/SQLiteManager";
 
 export default function TelaInicial({ navigation }) {
     const [listasProjetos, setListasProjetos] = useState([])
@@ -12,11 +12,11 @@ export default function TelaInicial({ navigation }) {
     const carregarProjetos = async () => {
         try {
             setCarregando(true)
-            let projetos = await getProjeto();
-            if (!Array.isArray(projetos)) {
-                projetos = []
+            let lista = await getProjetos();
+            if (!Array.isArray(lista)) {
+                lista = []
             }
-            setListasProjetos(projetos);
+            setListasProjetos(lista);
         } catch (error) {
             console.log('Erro ao carregar projetos: ', error)
         } finally {
@@ -32,17 +32,18 @@ export default function TelaInicial({ navigation }) {
         }, [])
     );
 
-    const DadosProjetos = (projeto) => (
-        <TouchableOpacity onPress={() => navigation.navigate('Detalhes', { projetoId: projeto.id })}>
-            <Card.Title>{projeto.nome_cliente}</Card.Title>
-            <Card.Divider />
-            <Text>Data de orçamento: {projeto.data_orcamento}</Text>
+    const DadosProjetos = ({ item }) => (
+        <TouchableOpacity onPress={() => navigation.navigate('Detalhes', { projetoId: item.id })}>
+            <Card>
+                <Card.Title>{item.nome_cliente}</Card.Title>
+                <Text>Data de orçamento: {item.data_orcamento}</Text>
+                <Card.Divider />
+            </Card>
         </TouchableOpacity>
     );
 
-
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <TouchableOpacity
                 title="Novo Projeto"
                 onPress={() => navigation.navigate('NovoProjeto')}>
@@ -59,11 +60,12 @@ export default function TelaInicial({ navigation }) {
                 <FlatList
                     data = {listasProjetos}
                     showsVerticalScrollIndicator={true} 
-                    keyExtractor={(projeto) => projeto.id}
-                    renderItem={({projeto})=> <DadosProjetos item={projeto}/> }
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => <DadosProjetos item={item}/> }
+                    ItemSeparatorComponent = {()=><View />}
                     ListEmptyComponent={<Text>Nenhuma Projeto Encontrado</Text>}
                 />
             )}
-        </View>
+        </SafeAreaView>
     )
 }

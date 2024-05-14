@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { Text, TextInput, View } from "react-native";
-import { createProjeto, initDB, obterUltimoId } from "../../dataBase/SQLiteManager";
+import React, { useCallback, useState } from "react";
+import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { createProjeto, getVariaveis, initDB, obterUltimoId, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
 import { Button } from "react-native-elements";
+import { useFocusEffect } from "@react-navigation/native";
 
 const formatarDataBrasil = () => {
     const dataAtual = new Date();
@@ -19,10 +20,18 @@ export default function NovoProjeto({ navigation }) {
     const [custoFerro, setCustoFerro] = useState('')
     const [custoDiaTrabalho, setCustoDiaTrabalho] = useState('')
 
-    const custoDeProjeto = () => {
-        custoObra = prazo * custoDiaTrabalho;
+    const gerarOrcamento = (prazo) => {
+        setPrazo(prazo)
+        let custoObra = parseFloat(custoDiaTrabalho) * parseFloat(prazo);
         setCusto(custoObra)
-        return custoObra
+    }
+
+    const exibirCusto = ()=>{
+        if(isNaN(custo)){
+            return <Text> </Text>
+        }else{
+           return <Text>{custo}</Text>
+        }
     }
     const salvarProjeto = async () => {
         if (!initDB) {
@@ -30,38 +39,52 @@ export default function NovoProjeto({ navigation }) {
         } else {
             try {
                 await createProjeto(nomeCliente, dataOrcamento, custo, prazo);
-                const projeto_id = await obterUltimoId();
+                console.log("Projeto criado com sucesso!")
                 navigation.goBack();
             } catch (error) {
                 console.log('Erro ao salvar Projeto: ', error)
             }
         }
     }
+    const carregarVariaveisSalvas = async () => {
+        try {
+            id = await obterUltimoIdVariaveis()
+            dados = await getVariaveis(id)
+            setCustoDiaTrabalho(dados[0].custo_dia_obra)
+            setCustoFerro(dados[0].custo_ferro )          
+        } catch (error) {
+            console.log("Erro ao carregar Variaveis: ", error)
+        }
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            carregarVariaveisSalvas();
+        }, [])
+    );
 
     return (
-        <View>
+        <SafeAreaView>
+            <Text>Nome do Cliente</Text>
             <TextInput
-                placeholder="Nome do Cliente"
                 onChangeText={setNomeCliente}
                 value={nomeCliente}
             />
+            <Text>Data de Orçamento</Text>
             <TextInput
-                placeholder="Data"
                 onChangeText={setDataOrcamento}
                 value={dataOrcamento}
             />
+            <Text>Prazo de entrega</Text>
             <TextInput
-                placeholder="Prazo"
-                onChangeText={setPrazo}
+                onChangeText={(prazo) => gerarOrcamento(prazo)}
+                keyboardType="numeric"
                 value={prazo}
-            />
-            <TextInput
-                placeholder="Custo de Orçamento"
-                onChangeText={() => custoDeProjeto()}
             />
             <Text>Custo de Dia de Trabalho {custoDiaTrabalho}</Text>
             <Text>Custo de Quilo do Ferro {custoFerro}</Text>
-            <Button title="Salvar Projeto" onPress={salvarProjeto} />
-        </View>
+            <Text>Custo de Orçamento {exibirCusto()}</Text>
+            <Button title="Salvar Projeto" onPress={() => salvarProjeto()} />
+        </SafeAreaView>
     )
 }

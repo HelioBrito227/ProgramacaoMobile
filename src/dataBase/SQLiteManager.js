@@ -27,10 +27,28 @@ export const createProjeto = async (nome_cliente, data_orcamento, custo, prazo) 
     }, null, null);
 }
 
-export const getProjeto = () => {
+export const getProjetos = () => {
     return new Promise((resolve, reject) => {
         db.transaction(tx => {
             tx.executeSql("SELECT * FROM projetos;", [], (_, { rows }) => {
+                if (rows.length > 0) {
+                    resolve(rows._array);
+                } else {
+                    resolve([]);
+                }
+            },
+                (_, error) => {
+                    console.log("Erro ao buscar os Projetos: " + error);
+                    reject(error);
+                });
+        });
+    });
+};
+
+export const getProjeto = async (id) => {
+    return new Promise((resolve, reject) => {
+        db.transaction(tx => {
+            tx.executeSql("SELECT * FROM projetos WHERE id =?", [id], (_, { rows }) => {
                 if (rows.length > 0) {
                     resolve(rows._array);
                 } else {

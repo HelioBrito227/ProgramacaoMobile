@@ -34,6 +34,7 @@ export default function Cotacao({ navigation }) {
         } else {
             try {
                 await createVariaveis(novoCustoFerro, novoCustoDiaTrabalho);
+                console.log("Variáveis inseridas com sucesso!")
                 navigation.goBack();
             } catch (error) {
                 console.log("Erro ao atualizar Variaveis: ", error)
