@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
-import { Text, TouchableOpacity, View, ActivityIndicator, FlatList, SafeAreaView } from "react-native";
+import { Text, TouchableOpacity, View, ActivityIndicator, FlatList, SafeAreaView, Image } from "react-native";
 import { useFocusEffect } from '@react-navigation/native'
+import styles from "./style";
 import { Card } from "react-native-elements";
 import { getProjetos } from "../../dataBase/SQLiteManager";
 
@@ -34,16 +35,16 @@ export default function TelaInicial({ navigation }) {
 
     const DadosProjetos = ({ item }) => (
         <TouchableOpacity onPress={() => navigation.navigate('Detalhes', { projetoId: item.id })}>
-            <Card>
-                <Card.Title>{item.nome_cliente}</Card.Title>
-                <Text>Data de orçamento: {item.data_orcamento}</Text>
-                <Card.Divider />
+            <Card containerStyle={styles.estiloCard}>
+                <Card.Title style={styles.estiloCardTitulo}>{item.nome_cliente}</Card.Title>
+                <Text style={styles.estiloCardTexto}>{item.data_orcamento}</Text>
+                <Image source={require('../../../assets/pencil-01.jpg')} />       
             </Card>
         </TouchableOpacity>
     );
 
     return (
-        <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <SafeAreaView style={styles.conteudoPrincipal}>
             <TouchableOpacity
                 title="Novo Projeto"
                 onPress={() => navigation.navigate('NovoProjeto')}>
@@ -58,6 +59,7 @@ export default function TelaInicial({ navigation }) {
                 <ActivityIndicator size="large" color="0000FF" />
             ):(
                 <FlatList
+                    style={styles.estiloFlatList}
                     data = {listasProjetos}
                     showsVerticalScrollIndicator={true} 
                     keyExtractor={(item) => item.id}

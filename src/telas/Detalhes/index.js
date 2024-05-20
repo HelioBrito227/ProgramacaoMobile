@@ -15,11 +15,13 @@ export default function Detalhes({navigation, route}){
             console.log("Erro ao carregar Projeto: ", error)
         }
     }
+    
     useFocusEffect(
         useCallback(()=>{
             buscarProjeto();
         },[])
     );
+
     return(
         <SafeAreaView>
             <Text>Cliente: {projeto.nome_cliente}</Text>

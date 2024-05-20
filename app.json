@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash_armacoes_menor.jpg",
+      "image": "./assets/Splash_Screen.png",
       "resizeMode": "contain",
       "backgroundColor": "#0551B3"
     },
