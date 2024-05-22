@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     },
     estiloCard:{
         flex:1,
+        //width:'100%',
         justifyContent:'left',
         alignItems: 'left',
         borderRadius: 15,
@@ -25,9 +26,9 @@ const styles = StyleSheet.create({
     estiloCardTexto:{
         fontSize:14,
     },
-    imagem:{ 
-        width:'10',
-        height:'10'
+    imagem:{
+        position:'absolute',
+        alignSelf:'flex-end'
     }
 })
 

@@ -3,6 +3,7 @@ import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-nat
 import { createProjeto, getVariaveis, initDB, obterUltimoId, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
 import { Button } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
+import NavBar from "../NavBar";
 
 const formatarDataBrasil = () => {
     const dataAtual = new Date();
@@ -85,6 +86,7 @@ export default function NovoProjeto({ navigation }) {
             <Text>Custo de Quilo do Ferro {custoFerro}</Text>
             <Text>Custo de Orçamento {exibirCusto()}</Text>
             <Button title="Salvar Projeto" onPress={() => salvarProjeto()} />
+            <NavBar navigation={navigation}/>
         </SafeAreaView>
     )
 }

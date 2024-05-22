@@ -4,6 +4,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import styles from "./style";
 import { Card } from "react-native-elements";
 import { getProjetos } from "../../dataBase/SQLiteManager";
+import NavBar from "../NavBar";
 
 export default function TelaInicial({ navigation }) {
     const [listasProjetos, setListasProjetos] = useState([])
@@ -36,25 +37,15 @@ export default function TelaInicial({ navigation }) {
     const DadosProjetos = ({ item }) => (
         <TouchableOpacity onPress={() => navigation.navigate('Detalhes', { projetoId: item.id })}>
             <Card containerStyle={styles.estiloCard}>
-                <Card.Title style={styles.estiloCardTitulo}>{item.nome_cliente}</Card.Title>
+                <Text style={styles.estiloCardTitulo}>{item.nome_cliente}</Text>
                 <Text style={styles.estiloCardTexto}>{item.data_orcamento}</Text>
-                <Image source={require('../../../assets/pencil-01.jpg')} />       
+                <Image source={require('../../../assets/pencil-01.png')} style={styles.imagem} />       
             </Card>
         </TouchableOpacity>
     );
 
     return (
         <SafeAreaView style={styles.conteudoPrincipal}>
-            <TouchableOpacity
-                title="Novo Projeto"
-                onPress={() => navigation.navigate('NovoProjeto')}>
-                <Text>Criar Novo Projeto</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                title="Alterar variaveis"
-                onPress={()=> navigation.navigate('Cotacao')}>
-                    <Text>Alterar Variaveis de Trabalho</Text>
-            </TouchableOpacity>
             {carregando? (
                 <ActivityIndicator size="large" color="0000FF" />
             ):(
@@ -68,6 +59,7 @@ export default function TelaInicial({ navigation }) {
                     ListEmptyComponent={<Text>Nenhuma Projeto Encontrado</Text>}
                 />
             )}
+            <NavBar navigation={navigation}/>
         </SafeAreaView>
     )
 }

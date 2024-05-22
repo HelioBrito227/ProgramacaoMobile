@@ -21,7 +21,6 @@ export default function Routes() {
 
     return(
     <NavigationContainer>
-      <StatusBar style="auto" />
       <Stack.Navigator
         initialRoute
         Name="Home"

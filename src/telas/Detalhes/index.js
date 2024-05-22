@@ -2,6 +2,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useState } from "react";
 import { SafeAreaView, Text } from "react-native";
 import { getProjeto } from "../../dataBase/SQLiteManager";
+import NavBar from "../NavBar";
 
 export default function Detalhes({navigation, route}){
     const [projeto, setProjeto] = useState([]);
@@ -28,6 +29,7 @@ export default function Detalhes({navigation, route}){
             <Text>Data de criação de orçamento: {projeto.data_orcamento}</Text>
             <Text>Custo total de Orçamento: {projeto.custo}</Text>
             <Text>Prazo para entrega de Obra : {projeto.prazo} dias</Text>
+            <NavBar navigation={navigation}/>
         </SafeAreaView>
     )
 }

@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, TextInput, Button, TouchableOpacity } from "r
 import styles from "./style";
 import { initDB, getVariaveis, updateVariaveis, createVariaveis, obterUltimoId, getAllVariaveis, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
 import { useFocusEffect } from "@react-navigation/native";
+import NavBar from "../NavBar";
 
 export default function Cotacao({ navigation }) {
 
@@ -66,6 +67,7 @@ export default function Cotacao({ navigation }) {
             <TouchableOpacity onPress={() => salvarDados()}>
                 <Text>Salvar Dados Inseridos</Text>
             </TouchableOpacity>
+            <NavBar navigation={navigation}/>
         </SafeAreaView>
     )
 }
