@@ -9,6 +9,7 @@ import TelaInicial from "../TelaInicial";
 import Detalhes from "../Detalhes";
 import NovoProjeto from "../NovoProjeto";
 import Cotacao from "../Cotacao";
+import Galeria from "../Galeria";
 
 
 export default function Routes() {
@@ -27,10 +28,11 @@ export default function Routes() {
         screenOptions={{
           headerTitleAlign: "center"
         }}>
-        <Stack.Screen name="TelaInicial" component={TelaInicial} options={{ title: 'Lista de Projetos' }} />
+        <Stack.Screen name="TelaInicial" component={TelaInicial} options={{ title: 'Meus Projetos' }} />
         <Stack.Screen name="Detalhes" component={Detalhes} options={{ title: 'Detalhamento de Projeto' }} />
-        <Stack.Screen name="NovoProjeto" component={NovoProjeto} options={{ title: 'Cadastro de Novo Projeto' }} />
-        <Stack.Screen name="Cotacao" component={Cotacao} options={{ title: 'Cotações Atuais'}}/>
+        <Stack.Screen name="NovoProjeto" component={NovoProjeto} options={{ title: 'Novo Projeto' }} />
+        <Stack.Screen name="Cotacoes" component={Cotacao} options={{ title: 'Cotações de Trabalho'}}/>
+        <Stack.Screen name="Galeria" component={Galeria} options={{ title: 'Galeria' }} />
       </Stack.Navigator>
     </NavigationContainer>
     );
