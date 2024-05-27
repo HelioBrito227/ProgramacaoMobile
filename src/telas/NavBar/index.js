@@ -6,14 +6,14 @@ export default function NavBar({ navigation }){
     return(
         <SafeAreaView style = {styles.navbar}>
             <TouchableOpacity
-            title = "Novo Projeto"
-            onPress={() => navigation.navigate('NovoProjeto')}>
-                <Image source={require('../../../assets/plus-circle.png')} style = {styles.imageStyle} />
-            </TouchableOpacity>
-            <TouchableOpacity
             title = "Meus Projetos"
             onPress={() => navigation.navigate('TelaInicial')}>
                 <Image source={require('../../../assets/home-03.png')} style = {styles.imageStyle} />
+            </TouchableOpacity>
+            <TouchableOpacity
+            title = "Novo Projeto"
+            onPress={() => navigation.navigate('NovoProjeto')}>
+                <Image source={require('../../../assets/plus-circle.png')} style = {styles.imageStyle} />
             </TouchableOpacity>
             <TouchableOpacity
             title = "Cotações de Trabalho"

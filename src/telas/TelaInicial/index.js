@@ -35,7 +35,7 @@ export default function TelaInicial({ navigation }) {
     );
 
     const DadosProjetos = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('Detalhamento de Projeto', { projetoId: item.id })}>
+        <TouchableOpacity onPress={() => navigation.navigate('Detalhes', { projetoId: item.id })}>
             <Card containerStyle={styles.estiloCard}>
                 <Text style={styles.estiloCardTitulo}>{item.nome_cliente}</Text>
                 <Text style={styles.estiloCardTexto}>{item.data_orcamento}</Text>
@@ -50,7 +50,6 @@ export default function TelaInicial({ navigation }) {
                 <ActivityIndicator size="large" color="0000FF" />
             ):(
                 <FlatList
-                    style={styles.estiloFlatList}
                     data = {listasProjetos}
                     showsVerticalScrollIndicator={true} 
                     keyExtractor={(item) => item.id}

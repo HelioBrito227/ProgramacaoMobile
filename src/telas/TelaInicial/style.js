@@ -7,17 +7,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#E7F1FF',
         height:"100%"
     },
-    estiloFlatList:{
-        flex:1,
-        paddingBottom: 15,
-    },
     estiloCard:{
         flex:1,
-        //width:'100%',
         justifyContent:'left',
         alignItems: 'left',
-        borderRadius: 15,
-        marginBottom:20      
+        borderRadius: 10,    
     },
     estiloCardTitulo:{
         fontSize:18,

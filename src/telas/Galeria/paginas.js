@@ -6,7 +6,7 @@ export default Paginas = ({ data, scrollX }) => {
     const { width } = useWindowDimensions();
 
     return (
-        <View style={{flexDirection: 'row', height: 64 }}> 
+        <View style={styles.pagina}> 
             {data.map((_, i) => {
                 const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
 

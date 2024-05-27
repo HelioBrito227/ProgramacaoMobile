@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
 
     navbar:{
+        position:"relative",
         flexDirection: "row",
         backgroundColor:'#0551B3',
         justifyContent: 'space-evenly',
@@ -11,8 +12,8 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     imageStyle:{
-        height: 40,
-        width:40
+        height: 30,
+        width:30
     }
 
 })

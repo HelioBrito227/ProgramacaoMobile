@@ -17,12 +17,12 @@ export default function Cotacao({ navigation }) {
             id = await obterUltimoIdVariaveis()
             dados = await getVariaveis(id)
             setCustoDiaTrabalho(dados[0].custo_dia_obra)
-            setCustoFerro(dados[0].custo_ferro )          
+            setCustoFerro(dados[0].custo_ferro)
         } catch (error) {
             console.log("Erro ao carregar Variaveis: ", error)
         }
     }
-    
+
     useFocusEffect(
         useCallback(() => {
             carregarVariaveisSalvas();
@@ -44,30 +44,29 @@ export default function Cotacao({ navigation }) {
     }
 
     return (
-        <SafeAreaView>
-            <Text> Cotação do Quilo do Ferro Salvo: {custoFerro}</Text>
-            <View>
-                <Text>Novo Valor do Quilo a ser Salvo:</Text>
+        <SafeAreaView style={styles.conteudoPrincipal}>
+            <View style={styles.container}>
+                <Text style={styles.label}>Cotação do Quilo do Ferro Salvo</Text>
+                <Text style={styles.variavel}>{custoFerro}</Text>
+                <Text style={styles.label}>Novo Valor do Quilo a ser Salvo</Text>
                 <TextInput style={styles.textInput}
                     keyboardType="decimal-pad"
                     onChangeText={setNovoCustoFerro}
                     value={novoCustoFerro}
                 />
-            </View>
-
-            <Text> Valor do dia de Trabalho: {custoDiaTrabalho}</Text>
-            <View>
-                <Text>Novo Valor de Dia de Trabalho a ser Salvo:</Text>
+                <Text style={styles.label}>Valor do dia de Trabalho</Text>
+                <Text style={styles.variavel}>{custoDiaTrabalho}</Text>
+                <Text style={styles.label}>Novo Valor de Dia de Trabalho a ser Salvo</Text>
                 <TextInput style={styles.textInput}
                     keyboardType="decimal-pad"
                     onChangeText={setNovoCustoDiaTrabalho}
                     value={novoCustoDiaTrabalho}
                 />
+                <TouchableOpacity style={styles.botao} onPress={() => salvarDados()}>
+                    <Text style={styles.textoBotao}>Salvar</Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => salvarDados()}>
-                <Text>Salvar Dados Inseridos</Text>
-            </TouchableOpacity>
-            <NavBar navigation={navigation}/>
+            <NavBar navigation={navigation} />
         </SafeAreaView>
     )
 }

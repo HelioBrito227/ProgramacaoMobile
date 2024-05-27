@@ -5,9 +5,10 @@ import Itens from "./itens";
 import slider from "./slider";
 import Paginas from "./paginas";
 import styles from "./style";
+import NavBar from "../NavBar";
 
 
-export default function Galeria() {
+export default function Galeria({navigation}) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const scrollX = useRef(new Animated.Value(0)).current;
     const sliderRef = useRef(null);
@@ -20,27 +21,29 @@ export default function Galeria() {
     return (
         <View style={styles.container}>
             <View style={{ flex: 3 }}>
-            <FlatList 
-            data={slider} 
-            renderItem={({ item }) => <Itens item={item} />}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            bounces={false}
-            keyExtractor={(item) => item.id}
-            onScroll={Animated.event([{nativeEvent: {contentOffset: {x: scrollX}}}], {
-                useNativeDriver: false,
+                <FlatList
+                    data={slider}
+                    renderItem={({ item }) => <Itens item={item} />}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    pagingEnabled
+                    bounces={false}
+                    keyExtractor={(item) => item.id}
+                    onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+                        useNativeDriver: false,
 
-            })}
-            scrollEventThrottle={32}
-            onViewableItemsChanged={viewableItemsChanged}
-            viewabilityConfig={viewConfig}
-            ref={sliderRef}
-            />
+                    })}
+                    scrollEventThrottle={32}
+                    onViewableItemsChanged={viewableItemsChanged}
+                    viewabilityConfig={viewConfig}
+                    ref={sliderRef}
+                />
+            </View>
+            
+            <Paginas data={slider} scrollX={scrollX} />
+            
+            <NavBar navigation={navigation}/>
         </View>
 
-        <Paginas data={slider} scrollX={scrollX} />
-
-        </View>
     );
 };

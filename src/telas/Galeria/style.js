@@ -2,9 +2,14 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: '#E7F1FF',
         flex: 1,
         justifyContent: "center",
-        alignItems: "center"
+    },
+    pagina: {
+        flexDirection: 'row',
+        height: 64,
+        alignSelf: "center" 
     },
     dot: {
         height: 10,
@@ -18,7 +23,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     itensImage: {
-        flex: 0.7,
+        flex: 0.9,
         justifyContent: 'center'
     }
 })

@@ -26,10 +26,11 @@ export default function Routes() {
         initialRoute
         Name="Home"
         screenOptions={{
-          headerTitleAlign: "center"
+          headerTitleAlign: "center",
+          headerStyle:{backgroundColor: '#E7F1FF'}
         }}>
         <Stack.Screen name="TelaInicial" component={TelaInicial} options={{ title: 'Meus Projetos' }} />
-        <Stack.Screen name="Detalhes" component={Detalhes} options={{ title: 'Detalhamento de Projeto' }} />
+        <Stack.Screen name="Detalhes" component={Detalhes} options={{ title: 'Detalhes' }} />
         <Stack.Screen name="NovoProjeto" component={NovoProjeto} options={{ title: 'Novo Projeto' }} />
         <Stack.Screen name="Cotacoes" component={Cotacao} options={{ title: 'Cotações de Trabalho'}}/>
         <Stack.Screen name="Galeria" component={Galeria} options={{ title: 'Galeria' }} />

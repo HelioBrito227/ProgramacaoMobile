@@ -4,6 +4,7 @@ import { createProjeto, getVariaveis, initDB, obterUltimoId, obterUltimoIdVariav
 import { Button } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
 import NavBar from "../NavBar";
+import styles from "./style";
 
 const formatarDataBrasil = () => {
     const dataAtual = new Date();
@@ -65,27 +66,38 @@ export default function NovoProjeto({ navigation }) {
     );
 
     return (
-        <SafeAreaView>
-            <Text>Nome do Cliente</Text>
+        <SafeAreaView style={styles.conteudoPrincipal}>
+            <View style={styles.container} > 
+            <Text style={styles.estiloTexto}>Nome do Cliente</Text>
             <TextInput
+                style={styles.estiloInput}
                 onChangeText={setNomeCliente}
                 value={nomeCliente}
             />
-            <Text>Data de Orçamento</Text>
+            <Text style={styles.estiloTexto}>Data de Orçamento</Text>
             <TextInput
                 onChangeText={setDataOrcamento}
                 value={dataOrcamento}
+                style={styles.estiloInput}
             />
-            <Text>Prazo de entrega</Text>
+            <Text style={styles.estiloTexto}>Prazo de entrega</Text>
             <TextInput
+            style={styles.estiloInput}
                 onChangeText={(prazo) => gerarOrcamento(prazo)}
                 keyboardType="numeric"
                 value={prazo}
             />
-            <Text>Custo de Dia de Trabalho {custoDiaTrabalho}</Text>
-            <Text>Custo de Quilo do Ferro {custoFerro}</Text>
-            <Text>Custo de Orçamento {exibirCusto()}</Text>
-            <Button title="Salvar Projeto" onPress={() => salvarProjeto()} />
+            <Text style={styles.estiloTexto}>Custo de Dia de Trabalho </Text>
+            <Text style={styles.estiloVariavel}>{custoDiaTrabalho}</Text>
+            <Text style={styles.estiloTexto}>Custo de Quilo do Ferro </Text>
+            <Text style={styles.estiloVariavel}>{custoFerro}</Text>
+            <Text style={styles.estiloTexto}>Custo de Orçamento </Text>
+            <Text style={styles.estiloInput}>{exibirCusto()}</Text>
+            <TouchableOpacity style={styles.botao} title="Salvar" onPress={() => salvarProjeto()}>
+            <Text style={styles.textoBotao}>Salvar</Text>
+            </TouchableOpacity>
+            </View>
+            
             <NavBar navigation={navigation}/>
         </SafeAreaView>
     )
