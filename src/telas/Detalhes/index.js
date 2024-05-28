@@ -34,7 +34,7 @@ export default function Detalhes({navigation, route}){
                 <Text style={styles.conteudo}>R$ {projeto.custo}</Text>
                 <Text style={styles.label}>Prazo para entrega de Obra : </Text>
                 <Text style={styles.conteudo}>{projeto.prazo} dias</Text>
-                <TouchableOpacity style={styles.botao}/* onPress={navigation.navigate('Editar', { projetoId: item.id })}*/>
+                <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Editar', { projetoId: projeto.id })}>
                     <Text style={styles.textoBotao}>Editar</Text>
                 </TouchableOpacity>
             </View>

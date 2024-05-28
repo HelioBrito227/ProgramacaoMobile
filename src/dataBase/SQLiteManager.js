@@ -66,7 +66,7 @@ export const getProjeto = async (id) => {
 export const updateProjeto = async (id, nome_cliente, data_orcamento, custo, prazo) => {
     db.transaction(tx => {
         tx.executeSql(
-            "UPDATE Projetos SET nome_cliente = ?, data_orcamento = ?, custo = ?, prazo = ? WHERE ID = ?;"
+            "UPDATE projetos SET nome_cliente = ?, data_orcamento = ?, custo = ?, prazo = ? WHERE ID = ?;",
             [nome_cliente, data_orcamento, custo, prazo, id]
         );
     }, null, null)
