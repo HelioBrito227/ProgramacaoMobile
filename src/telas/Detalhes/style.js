@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-    tela:{
+    conteudoPrincipal:{
         flex:1,
         height:"100%",
         backgroundColor:'#E7F1FF'
     },
-    blocoConteudo:{
+    container:{
         flex:1,
         paddingLeft:20,
         paddingTop:20

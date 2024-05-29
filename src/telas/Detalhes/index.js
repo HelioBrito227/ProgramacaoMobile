@@ -25,8 +25,8 @@ export default function Detalhes({navigation, route}){
     );
 
     return (
-        <SafeAreaView style={styles.tela}>
-            <View style={styles.blocoConteudo}>
+        <SafeAreaView style={styles.conteudoPrincipal}>
+            <View style={styles.container}>
                 <Text style={styles.titulo}>{projeto.nome_cliente}</Text>
                 <Text style={styles.label}>Data de criação de orçamento:</Text>
                 <Text style={styles.conteudo}>{projeto.data_orcamento}</Text>

@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
         height:35,
         width:320,
         borderRadius:10,
-        fontSize:15
+        fontSize:15,
+        borderWidth:0.5
     },
     estiloVariavel:{
         fontSize:15,

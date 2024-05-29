@@ -75,11 +75,11 @@ export default function NovoProjeto({ navigation }) {
                 value={nomeCliente}
             />
             <Text style={styles.estiloTexto}>Data de Orçamento</Text>
-            <TextInput
+            <Text
                 onChangeText={setDataOrcamento}
                 value={dataOrcamento}
-                style={styles.estiloInput}
-            />
+                style={styles.estiloVariavel}
+            >{dataOrcamento}</Text>
             <Text style={styles.estiloTexto}>Prazo de entrega</Text>
             <TextInput
             style={styles.estiloInput}
@@ -89,10 +89,8 @@ export default function NovoProjeto({ navigation }) {
             />
             <Text style={styles.estiloTexto}>Custo de Dia de Trabalho </Text>
             <Text style={styles.estiloVariavel}>{custoDiaTrabalho}</Text>
-            <Text style={styles.estiloTexto}>Custo de Quilo do Ferro </Text>
-            <Text style={styles.estiloVariavel}>{custoFerro}</Text>
             <Text style={styles.estiloTexto}>Custo de Orçamento </Text>
-            <Text style={styles.estiloInput}>{exibirCusto()}</Text>
+            <Text style={styles.estiloVariavel}>{exibirCusto()}</Text>
             <TouchableOpacity style={styles.botao} title="Salvar" onPress={() => salvarProjeto()}>
             <Text style={styles.textoBotao}>Salvar</Text>
             </TouchableOpacity>

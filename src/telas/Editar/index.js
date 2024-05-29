@@ -1,7 +1,7 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useState } from "react";
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { getProjeto, initDB, updateProjeto } from "../../dataBase/SQLiteManager";
+import { getProjeto, getVariaveis, initDB, obterUltimoIdVariaveis, updateProjeto } from "../../dataBase/SQLiteManager";
 import NavBar from "../NavBar";
 import styles from "./style";
 
@@ -13,8 +13,8 @@ const formatarDataBrasil = () => {
     return `${dia}/${mes}/${ano}`
 }
 
-export default function Editar({navigation, route}){
-    const projetoId= route.params.projetoId
+export default function Editar({ navigation, route }) {
+    const projetoId = route.params.projetoId
     const [projeto, setProjeto] = useState([]);
     const [nomeCliente, setNomeCliente] = useState('')
     const [dataOrcamento, setDataOrcamento] = useState(formatarDataBrasil())
@@ -22,27 +22,36 @@ export default function Editar({navigation, route}){
     const [prazo, setPrazo] = useState('')
     const [custoFerro, setCustoFerro] = useState('')
     const [custoDiaTrabalho, setCustoDiaTrabalho] = useState('')
+    const [novoCustoDiaTrabalho, setNovoCustoDiaTrabalho] = useState('')
 
-    const buscarProjeto = async() =>{
-        try{
+    const buscarProjeto = async () => {
+        try {
             const proj = await getProjeto(projetoId)
             setProjeto(proj)
-        }catch (error) {
+        } catch (error) {
             console.log("Erro ao carregar Projeto: ", error)
         }
     }
 
-    const gerarOrcamento = (prazo) => {
-        setPrazo(prazo)
-        let custoObra = parseFloat(custoDiaTrabalho) * parseFloat(prazo);
-        setCusto(custoObra)
-    }
-
-    const exibirCusto = ()=>{
-        if(isNaN(custo)){
-            return <Text> </Text>
+    const exibirCusto = () => {
+        let prazoAtual
+        let custoObra
+        if(!prazo){
+            prazoAtual = projeto.prazo
         }else{
-           return <Text>{custo}</Text>
+            prazoAtual = prazo
+        }
+        if(!novoCustoDiaTrabalho){
+            custoObra = custoDiaTrabalho
+        }else{
+            custoObra = novoCustoDiaTrabalho
+        }
+        let custoTotal = parseFloat(prazoAtual) * parseFloat(custoObra);
+        ()=> setCusto(custoTotal)
+        if (isNaN(custoTotal)) {
+            return <Text> </Text>
+        } else {
+            return <Text>{custoTotal}</Text>
         }
     }
 
@@ -51,69 +60,67 @@ export default function Editar({navigation, route}){
             id = await obterUltimoIdVariaveis()
             dados = await getVariaveis(id)
             setCustoDiaTrabalho(dados[0].custo_dia_obra)
-            setCustoFerro(dados[0].custo_ferro )          
         } catch (error) {
             console.log("Erro ao carregar Variaveis: ", error)
         }
     }
-    
+
     useFocusEffect(
-        useCallback(()=>{
+        useCallback(() => {
             buscarProjeto();
-        },[])
+            carregarVariaveisSalvas();
+        }, [])
     );
-    
+
     const atualizarProjeto = async () => {
-            if (!initDB) {
-                console.log('banco de dados não inicializado!')
-            } else {
-                try {
-                    await updateProjeto(
-                        projeto.id,
-                        !nomeCliente ? projeto.nome_cliente : nomeCliente,
-                        !dataOrcamento ? projeto.data_orcamento : dataOrcamento,
-                        !custo ? projeto.custo : custo ,
-                        !prazo ? projeto.prazo : prazo
-                    );
-                    console.log("Projeto atualizado com sucesso!")
-                    navigation.goBack();
-                } catch (error) {
-                    console.log('Erro ao atualizar Projeto: ', error)
-                }
+        if (!initDB) {
+            console.log('banco de dados não inicializado!')
+        } else {
+            try {console.log(custo, prazo)
+                await updateProjeto(
+                    projeto.id,
+                    !nomeCliente ? projeto.nome_cliente : nomeCliente,
+                    !dataOrcamento ? projeto.data_orcamento : dataOrcamento,
+                    !custo ? projeto.custo : custo,
+                    !prazo ? projeto.prazo : prazo
+                );
+                console.log("Projeto atualizado com sucesso!")
+                navigation.goBack();
+            } catch (error) {
+                console.log('Erro ao atualizar Projeto: ', error)
             }
+        }
     }
 
     return (
         <SafeAreaView style={styles.tela}>
             <View style={styles.blocoConteudo}>
-            <Text style={styles.label}>Nome do Cliente:</Text>
+                <Text style={styles.label}>Nome do Cliente:</Text>
                 <TextInput
-                placeholder={projeto.nome_cliente}
-                style={styles.estiloInput}
-                onChangeText={setNomeCliente}
-                value={nomeCliente}
-            />
+                    placeholder={projeto.nome_cliente}
+                    style={styles.estiloInput}
+                    onChangeText={setNomeCliente}
+                    value={nomeCliente}
+                />
                 <Text style={styles.label}>Data de criação de orçamento:</Text>
-                <TextInput
-                 placeholder={projeto.dataOrcamento}
-                onChangeText={setDataOrcamento}
-                value={dataOrcamento}
-                style={styles.estiloInput}
-            />
-                <Text style={styles.label}>Custo total de Orçamento: </Text>
-                <TextInput
-                 placeholder={ "R$" + projeto.custo}
-                onChangeText={setCusto}
-                value={custo}
-                style={styles.estiloInput}
-            />
+                <Text style={styles.variavel}>{dataOrcamento}</Text>
+                <Text style={styles.label}>Valor do dia de Trabalho Mais Recente:</Text>
+                <Text style={styles.variavel}>{custoDiaTrabalho}</Text>
+                <Text style={styles.label}>Novo Valor de Dia de Trabalho a ser Utilizado:</Text>
+                <TextInput style={styles.estiloInput}
+                    keyboardType="decimal-pad"
+                    onChangeText={setNovoCustoDiaTrabalho}
+                    value={novoCustoDiaTrabalho}
+                />
                 <Text style={styles.label}>Prazo para entrega de Obra : </Text>
                 <TextInput
-                placeholder={projeto.prazo + " dias"}
-                onChangeText={setPrazo}
-                value={prazo}
-                style={styles.estiloInput}
-            />
+                    placeholder={projeto.prazo + " dias"}
+                    onChangeText={setPrazo}
+                    value={prazo}
+                    style={styles.estiloInput}
+                />
+                <Text style={styles.label}>Custo total de Orçamento: </Text>
+                <Text style={styles.conteudo}>R${exibirCusto()}</Text>
                 <TouchableOpacity style={styles.botao} onPress={() => atualizarProjeto()}>
                     <Text style={styles.textoBotao}>Salvar</Text>
                 </TouchableOpacity>
