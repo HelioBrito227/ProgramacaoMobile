@@ -46,13 +46,16 @@ export default function Editar({ navigation, route }) {
         }else{
             custoObra = novoCustoDiaTrabalho
         }
-        let custoTotal = parseFloat(prazoAtual) * parseFloat(custoObra);
-        ()=> setCusto(custoTotal)
+        const custoTotal = parseFloat(prazoAtual) * parseFloat(custoObra);
+        //!custoTotal? null : setCusto(custoTotal)
+        console.log(custo)
         if (isNaN(custoTotal)) {
-            return <Text> </Text>
+            return null
         } else {
-            return <Text>{custoTotal}</Text>
+            !custoTotal? null : setCusto(custoTotal)
+            return custoTotal
         }
+        
     }
 
     const carregarVariaveisSalvas = async () => {
@@ -76,7 +79,9 @@ export default function Editar({ navigation, route }) {
         if (!initDB) {
             console.log('banco de dados não inicializado!')
         } else {
-            try {console.log(custo, prazo)
+            try {
+                console.log("custo "+custo, " prazo "+prazo)
+
                 await updateProjeto(
                     projeto.id,
                     !nomeCliente ? projeto.nome_cliente : nomeCliente,
@@ -120,7 +125,7 @@ export default function Editar({ navigation, route }) {
                     style={styles.estiloInput}
                 />
                 <Text style={styles.label}>Custo total de Orçamento: </Text>
-                <Text style={styles.conteudo}>R${exibirCusto()}</Text>
+                <Text style={styles.conteudo}>{exibirCusto()}</Text>
                 <TouchableOpacity style={styles.botao} onPress={() => atualizarProjeto()}>
                     <Text style={styles.textoBotao}>Salvar</Text>
                 </TouchableOpacity>
@@ -129,6 +134,6 @@ export default function Editar({ navigation, route }) {
                 <NavBar navigation={navigation} />
             </View>
         </SafeAreaView>
-
     )
+
 }
