@@ -1,5 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { getProjeto, getVariaveis, initDB, obterUltimoIdVariaveis, updateProjeto } from "../../dataBase/SQLiteManager";
 import NavBar from "../NavBar";
@@ -34,28 +34,13 @@ export default function Editar({ navigation, route }) {
     }
 
     const exibirCusto = () => {
-        let prazoAtual
-        let custoObra
-        if(!prazo){
-            prazoAtual = projeto.prazo
-        }else{
-            prazoAtual = prazo
-        }
-        if(!novoCustoDiaTrabalho){
-            custoObra = custoDiaTrabalho
-        }else{
-            custoObra = novoCustoDiaTrabalho
-        }
-        const custoTotal = parseFloat(prazoAtual) * parseFloat(custoObra);
-        //!custoTotal? null : setCusto(custoTotal)
-        console.log(custo)
+        let custoTotal
+        !custo ? custoTotal = projeto.custo : custoTotal = custo
         if (isNaN(custoTotal)) {
-            return null
+            return <Text> </Text>
         } else {
-            !custoTotal? null : setCusto(custoTotal)
-            return custoTotal
+            return <Text>{custoTotal}</Text>
         }
-        
     }
 
     const carregarVariaveisSalvas = async () => {
@@ -75,12 +60,23 @@ export default function Editar({ navigation, route }) {
         }, [])
     );
 
+    useEffect(() => {
+        let prazoAtual = prazo || projeto.prazo;
+        let custoObra = novoCustoDiaTrabalho || custoDiaTrabalho;
+
+        // Verifique se prazoAtual e custoObra são números
+        if (!isNaN(prazoAtual) && !isNaN(custoObra)) {
+            let custoTotal = parseFloat(prazoAtual) * parseFloat(custoObra);
+            setCusto(custoTotal);
+        }
+    }, [prazo, novoCustoDiaTrabalho]);
+
     const atualizarProjeto = async () => {
         if (!initDB) {
             console.log('banco de dados não inicializado!')
         } else {
             try {
-                console.log("custo "+custo, " prazo "+prazo)
+                console.log("custo " + custo, " prazo " + prazo)
 
                 await updateProjeto(
                     projeto.id,
@@ -121,11 +117,12 @@ export default function Editar({ navigation, route }) {
                 <TextInput
                     placeholder={projeto.prazo + " dias"}
                     onChangeText={setPrazo}
+                    keyboardType="decimal-pad"
                     value={prazo}
                     style={styles.estiloInput}
                 />
                 <Text style={styles.label}>Custo total de Orçamento: </Text>
-                <Text style={styles.conteudo}>{exibirCusto()}</Text>
+                <Text style={styles.conteudo}>R${exibirCusto()}</Text>
                 <TouchableOpacity style={styles.botao} onPress={() => atualizarProjeto()}>
                     <Text style={styles.textoBotao}>Salvar</Text>
                 </TouchableOpacity>

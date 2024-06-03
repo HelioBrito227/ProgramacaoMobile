@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent:'left',
         alignItems: 'left',
-        borderRadius: 10,    
+        borderRadius: 10,  
     },
     estiloCardTitulo:{
         fontSize:18,
