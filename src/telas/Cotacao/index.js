@@ -46,16 +46,8 @@ export default function Cotacao({ navigation }) {
     return (
         <SafeAreaView style={styles.conteudoPrincipal}>
             <View style={styles.container}>
-                <Text style={styles.label}>Cotação do Quilo do Ferro Salvo</Text>
-                <Text style={styles.variavel}>{custoFerro}</Text>
-                <Text style={styles.label}>Novo Valor do Quilo a ser Salvo</Text>
-                <TextInput style={styles.textInput}
-                    keyboardType="decimal-pad"
-                    onChangeText={setNovoCustoFerro}
-                    value={novoCustoFerro}
-                />
                 <Text style={styles.label}>Valor do dia de Trabalho</Text>
-                <Text style={styles.variavel}>{custoDiaTrabalho}</Text>
+                <Text style={styles.variavel}>{!custoDiaTrabalho? "Não há custo de dia de Trabalho Salvo": custoDiaTrabalho}</Text>
                 <Text style={styles.label}>Novo Valor de Dia de Trabalho a ser Salvo</Text>
                 <TextInput style={styles.textInput}
                     keyboardType="decimal-pad"

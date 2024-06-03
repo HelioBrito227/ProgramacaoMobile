@@ -18,7 +18,7 @@ export default function NavBar({ navigation }){
             <TouchableOpacity
             title = "Cotações de Trabalho"
             onPress={() => navigation.navigate('Cotacoes')} >
-                <Image source={require('../../../assets/ruler.png')} style = {styles.imageStyle} />
+                <Image source={require('../../../assets/ruler-white.png')} style = {styles.imageStyle} />
             </TouchableOpacity>
             <TouchableOpacity
             title = "Galeria de Imagens"

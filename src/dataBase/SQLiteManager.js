@@ -1,7 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 import { Tables } from './Schemas'
 
-const database_name = "Novobanco.db"
+const database_name = "Projetos.db"
 
 let db;
 
@@ -135,7 +135,7 @@ export const obterUltimoIdVariaveis = () => {
                 if (rows.length > 0) {
                     resolve(rows.length);
                 } else {
-                    reject('Nenhum ID encontrado');
+                    reject("Nenhum ID encontrado");
                 }
             });
         });

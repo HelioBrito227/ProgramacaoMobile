@@ -55,7 +55,17 @@ export default function TelaInicial({ navigation }) {
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => <DadosProjetos item={item}/> }
                     ItemSeparatorComponent = {()=><View />}
-                    ListEmptyComponent={<Text>Nenhuma Projeto Encontrado</Text>}
+                    ListEmptyComponent={
+                    <SafeAreaView style={styles.container}>
+                        <Text style={styles.titulo}>Nenhum Projeto Encontrado</Text>
+                        <Text style={styles.estiloCardTexto}>Sendo essa a primeira vez iniciando o aplicativo, clique no ícone da régua</Text> 
+                        <Image source={require('../../../assets/ruler.png')} style={styles.imagemTexto} />
+                        <Text style={styles.estiloCardTexto}>para a inserção inicial da váriavel de trabalho.</Text>
+                        <Text style={styles.estiloCardTexto}>Depois dessa variável ser inserida no Banco de Dados, clique no ícone de +</Text>
+                        <Image source={require('../../../assets/plus-circle-black.png')} style={styles.imagemTexto} />
+                        <Text style={styles.estiloCardTexto}> para a criação de um novo projeto.</Text>
+                    </SafeAreaView>
+                }
                 />
             )}
             <NavBar navigation={navigation}/>

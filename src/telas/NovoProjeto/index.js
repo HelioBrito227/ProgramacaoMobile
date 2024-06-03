@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { createProjeto, getVariaveis, initDB, obterUltimoId, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
-import { Button } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
 import NavBar from "../NavBar";
 import styles from "./style";
@@ -35,6 +34,7 @@ export default function NovoProjeto({ navigation }) {
            return <Text>{custo}</Text>
         }
     }
+
     const salvarProjeto = async () => {
         if (!initDB) {
             console.log('banco de dados não inicializado!')
@@ -48,6 +48,17 @@ export default function NovoProjeto({ navigation }) {
             }
         }
     }
+
+    const alerta = () =>{  
+        Alert.alert('Falta de Variável','Redirecionando para a tela de cadastro de variável de trabalho',[
+            {
+                text:"Ok",
+                onPress:()=> navigation.navigate('Cotacoes')
+            }
+        ]);
+        
+    };
+
     const carregarVariaveisSalvas = async () => {
         try {
             id = await obterUltimoIdVariaveis()
@@ -56,6 +67,9 @@ export default function NovoProjeto({ navigation }) {
             setCustoFerro(dados[0].custo_ferro )          
         } catch (error) {
             console.log("Erro ao carregar Variaveis: ", error)
+            if(error === "Nenhum ID encontrado"){
+               alerta();
+            }
         }
     }
 
@@ -90,7 +104,7 @@ export default function NovoProjeto({ navigation }) {
             <Text style={styles.estiloTexto}>Custo de Dia de Trabalho </Text>
             <Text style={styles.estiloVariavel}>{custoDiaTrabalho}</Text>
             <Text style={styles.estiloTexto}>Custo de Orçamento </Text>
-            <Text style={styles.estiloVariavel}>{exibirCusto()}</Text>
+            <Text style={styles.estiloVariavel}>R$ {exibirCusto()}</Text>
             <TouchableOpacity style={styles.botao} title="Salvar" onPress={() => salvarProjeto()}>
             <Text style={styles.textoBotao}>Salvar</Text>
             </TouchableOpacity>

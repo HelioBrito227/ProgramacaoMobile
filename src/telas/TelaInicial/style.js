@@ -7,6 +7,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#E7F1FF',
         height:"100%"
     },
+    container:{
+        flex:1,
+        paddingLeft:20,
+        paddingTop:20,
+        backgroundColor: '#E7F1FF',
+    },
+    titulo:{
+        fontSize:20,
+        fontWeight:"600",
+    },
     estiloCard:{
         flex:1,
         justifyContent:'left',
@@ -18,11 +28,15 @@ const styles = StyleSheet.create({
         fontWeight:'bold'
     },
     estiloCardTexto:{
-        fontSize:14,
+        fontSize:16,
     },
     imagem:{
         position:'absolute',
         alignSelf:'flex-end'
+    },
+    imagemTexto:{
+        height:50,
+        width:50
     }
 })
 
