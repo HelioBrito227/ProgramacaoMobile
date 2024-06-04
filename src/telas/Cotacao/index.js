@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
-import { View, Text, SafeAreaView, TextInput, Button, TouchableOpacity } from "react-native";
+import { View, Text, SafeAreaView, TextInput, TouchableOpacity } from "react-native";
 import styles from "./style";
-import { initDB, getVariaveis, updateVariaveis, createVariaveis, obterUltimoId, getAllVariaveis, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
+import { initDB, getVariaveis, createVariaveis, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
 import { useFocusEffect } from "@react-navigation/native";
 import NavBar from "../NavBar";
 

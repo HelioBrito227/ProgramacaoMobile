@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Alert, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { createProjeto, getVariaveis, initDB, obterUltimoId, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
+import { createProjeto, getVariaveis, initDB, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
 import { useFocusEffect } from "@react-navigation/native";
 import NavBar from "../NavBar";
 import styles from "./style";

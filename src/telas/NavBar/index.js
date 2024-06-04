@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { Image, SafeAreaView, TouchableOpacity } from "react-native";
 
 import styles from "./style";

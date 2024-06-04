@@ -1,7 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 import { Tables } from './Schemas'
 
-const database_name = "Projetos.db"
+const database_name = "teste.db"
 
 let db;
 

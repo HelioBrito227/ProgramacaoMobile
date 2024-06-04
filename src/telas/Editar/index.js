@@ -1,5 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { getProjeto, getVariaveis, initDB, obterUltimoIdVariaveis, updateProjeto } from "../../dataBase/SQLiteManager";
 import NavBar from "../NavBar";

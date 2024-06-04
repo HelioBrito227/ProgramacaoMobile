@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Text, View, FlatList, Animated } from "react-native";
+import { View, FlatList, Animated } from "react-native";
 
 import Itens from "./itens";
 import slider from "./slider";
