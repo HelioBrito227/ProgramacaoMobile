@@ -1,143 +1,124 @@
 import * as SQLite from 'expo-sqlite';
-import { Tables } from './Schemas'
 
-const database_name = "teste.db"
-
-let db;
-
-export const initDB = () => {
-    db = SQLite.openDatabase(database_name);
-    for (const table in Tables) {
-        let fields = Tables[table];
-        let sql = `CREATE TABLE IF NOT EXISTS ${table} (${fields.join(", ")});`;
-        db.transaction(tx => {
-            tx.executeSql(sql, [], (_, { rows }) =>
-                console.log(`Tabela '${table}' criada com sucesso!!`)
-            );
-        });
-    }
+export const initDB = async () => {
+    const db = await SQLite.openDatabaseAsync('BancoDeProjetos');
+    await db.execAsync(`
+        CREATE TABLE IF NOT EXISTS projetos(
+            id INTEGER PRIMARY KEY NOT NULL,
+            nome_cliente VARCHAR(50),
+            data_orcamento DATE,
+            custo REAL,
+            prazo VARCHAR(15)
+        );
+        CREATE TABLE IF NOT EXISTS variavel(
+            id INTEGER PRIMARY KEY NOT NULL,
+            custo_dia_obra REAL
+        );
+        `);
+    db.closeAsync();
 };
 
 export const createProjeto = async (nome_cliente, data_orcamento, custo, prazo) => {
-    db.transaction(tx => {
-        tx.executeSql(
-            "INSERT INTO Projetos (nome_cliente, data_orcamento, custo, prazo) VALUES (?,?,?,?);",
-            [nome_cliente, data_orcamento, custo, prazo]
-        );
-    }, null, null);
-}
+    const db = await SQLite.openDatabaseAsync('BancoDeProjetos');
+    await db.runAsync('INSERT INTO projetos (nome_cliente, data_orcamento, custo, prazo) VALUES (?,?,?,?);',
+        [nome_cliente, data_orcamento, custo, prazo]);
+};
 
-export const getProjetos = () => {
-    return new Promise((resolve, reject) => {
-        db.transaction(tx => {
-            tx.executeSql("SELECT * FROM projetos;", [], (_, { rows }) => {
-                if (rows.length > 0) {
-                    resolve(rows._array);
-                } else {
-                    resolve([]);
-                }
-            },
-                (_, error) => {
-                    console.log("Erro ao buscar os Projetos: " + error);
-                    reject(error);
-                });
-        });
+export const getProjetos = async () => {
+    const db = await SQLite.openDatabaseAsync('BancoDeProjetos');
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            const projetos = await db.getAllAsync('SELECT * FROM projetos');
+            if (projetos.length > 0) {
+                resolve(projetos);
+            } else {
+                resolve([]);
+            }
+        } catch (error) {
+            console.log("Erro ao buscar os Projetos: " + error);
+            reject(error);
+        }
     });
 };
 
 export const getProjeto = async (id) => {
-    return new Promise((resolve, reject) => {
-        db.transaction(tx => {
-            tx.executeSql("SELECT * FROM projetos WHERE id =?", [id], (_, { rows }) => {
-                if (rows.length > 0) {
-                    resolve(rows._array[0]);
-                } else {
-                    resolve([]);
-                }
-            },
-                (_, error) => {
-                    console.log("Erro ao buscar as Projetos: " + error);
-                    reject(error);
-                });
-        });
+    const db = await SQLite.openDatabaseAsync('BancoDeProjetos');
+    return new Promise(async (resolve, reject) => {
+        try {
+            const projeto = await db.getFirstAsync('SELECT * FROM projetos WHERE id = ?;', (id));
+            if (projeto) {
+                resolve(projeto);
+            } else {
+                resolve([]);
+            }
+        } catch (error) {
+            console.log("Erro ao buscar Projeto " + error);
+            reject(error);
+        }
     });
 };
 
 export const updateProjeto = async (id, nome_cliente, data_orcamento, custo, prazo) => {
-    db.transaction(tx => {
-        tx.executeSql(
-            "UPDATE projetos SET nome_cliente = ?, data_orcamento = ?, custo = ?, prazo = ? WHERE ID = ?;",
-            [nome_cliente, data_orcamento, custo, prazo, id]
-        );
-    }, null, null)
+    const db = await SQLite.openDatabaseAsync('BancoDeProjetos');
+    db.runAsync(
+        'UPDATE projetos SET nome_cliente = ?, data_orcamento = ?, custo = ?, prazo = ? WHERE ID = ?;',
+        [nome_cliente, data_orcamento, custo, prazo, id]
+    );
 };
 
-export const deleteProjeto = async (id) => {
-    db.transaction(tx => {
-        tx.executeSql("DELETE FROM Projetos WHERE id = ?;", [id]);
-    }, null, null);
-};
+export const obterUltimoIdProjetos = async () => {
+    const db = await SQLite.openDatabaseAsync('BancoDeProjetos');
 
-export const obterUltimoIdProjetos = () => {
-    return new Promise((resolve, reject) => {
-        db.transaction(tx => {
-            tx.executeSql("SELECT last_insert_rowid() FROM Projetos as ultimoId;", [], (_, { rows }) => {
-                if (rows.length > 0) {
-                    resolve(rows.length);
-                } else {
-                    reject('Nenhum ID encontrado');
-                }
-            });
-        });
+    return new Promise(async (resolve, reject) => {
+        try {
+            const ultimoId = await db.getAllAsync('SELECT * from variavel;');
+            if (ultimoId.length > 0) {
+                resolve(ultimoId.length);
+            } else {
+                reject("Nenhum ID encontrado");
+            }
+        } catch (error) {
+        }
     });
 };
 
-export const createVariaveis = async (custo_ferro, custo_dia_obra) => {
-    db.transaction(tx => {
-        tx.executeSql(
-            "INSERT INTO Variaveis (custo_ferro, custo_dia_obra) VALUES (?,?);",
-            [custo_ferro, custo_dia_obra]
-        );
-    }, null, null);
+export const createVariavel = async (custo_dia_obra) => {
+
+    const db = await SQLite.openDatabaseAsync('BancoDeProjetos');
+    await db.runAsync('INSERT INTO variavel (custo_dia_obra) VALUES (?);',
+        [custo_dia_obra]);
 }
 
-export const getVariaveis = async (id) => {
-    return new Promise((resolve, reject) => {
-        db.transaction(tx => {
-            tx.executeSql("SELECT * FROM variaveis WHERE id = ?;", [id], (_, { rows }) => {
-                if (rows.length > 0) {
-                    resolve(rows._array);
-                } else {
-                    resolve([]);
-                }
-            },
-                (_, error) => {
-                    console.log("Erro ao buscar as Variaveis: " + error);
-                    reject(error);
-                });
-        });
+export const getVariavel = async (id) => {
+    const db = await SQLite.openDatabaseAsync('BancoDeProjetos');
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            const variavel = await db.getAllAsync('SELECT * FROM variavel WHERE id = ?;', (id));
+            if (variavel.length > 0) {
+                resolve(variavel);
+            } else {
+                resolve([]);
+            }
+        } catch (error) {
+            console.log("Erro ao buscar a Variavel " + error);
+            reject(error);
+        }
     });
 };
 
-export const updateVariaveis = async (custo_ferro, custo_dia_obra, id) => {
-    db.transaction(tx => {
-        tx.executeSql(
-            "UPDATE Variaveis SET custo_ferro = ?, custo_dia_obra = ? WHERE id = ?;"
-            [custo_ferro, custo_dia_obra, id]
-        );
-    }, null, null)
-};
-
-export const obterUltimoIdVariaveis = () => {
-    return new Promise((resolve, reject) => {
-        db.transaction(tx => {
-            tx.executeSql("SELECT last_insert_rowid() FROM Variaveis as ultimoId;", [], (_, { rows }) => {
-                if (rows.length > 0) {
-                    resolve(rows.length);
-                } else {
-                    reject("Nenhum ID encontrado");
-                }
-            });
-        });
+export const obterUltimoIdVariaveis = async () => {
+    const db = await SQLite.openDatabaseAsync('BancoDeProjetos');
+    return new Promise(async (resolve, reject) => {
+        try {
+            const ultimoId = await db.getAllAsync('SELECT * from variavel');
+            if (ultimoId.length > 0) {
+                resolve(ultimoId.length);
+            } else {
+                reject("Nenhum ID encontrado");
+            }
+        } catch (error) {
+        }
     });
 };

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Alert, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { createProjeto, getVariaveis, initDB, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
+import { createProjeto, getVariavel, initDB, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
 import { useFocusEffect } from "@react-navigation/native";
 import NavBar from "../NavBar";
 import styles from "./style";
@@ -18,7 +18,6 @@ export default function NovoProjeto({ navigation }) {
     const [dataOrcamento, setDataOrcamento] = useState(formatarDataBrasil())
     const [custo, setCusto] = useState('')
     const [prazo, setPrazo] = useState('')
-    const [custoFerro, setCustoFerro] = useState('')
     const [custoDiaTrabalho, setCustoDiaTrabalho] = useState('')
 
     const gerarOrcamento = (prazo) => {
@@ -62,9 +61,8 @@ export default function NovoProjeto({ navigation }) {
     const carregarVariaveisSalvas = async () => {
         try {
             id = await obterUltimoIdVariaveis()
-            dados = await getVariaveis(id)
-            setCustoDiaTrabalho(dados[0].custo_dia_obra)
-            setCustoFerro(dados[0].custo_ferro )          
+            dados = await getVariavel(id)
+            setCustoDiaTrabalho(dados[0].custo_dia_obra)        
         } catch (error) {
             console.log("Erro ao carregar Variaveis: ", error)
             if(error === "Nenhum ID encontrado"){
@@ -102,7 +100,7 @@ export default function NovoProjeto({ navigation }) {
                 value={prazo}
             />
             <Text style={styles.estiloTexto}>Custo de Dia de Trabalho </Text>
-            <Text style={styles.estiloVariavel}>{custoDiaTrabalho}</Text>
+            <Text style={styles.estiloVariavel}>R$ {custoDiaTrabalho}</Text>
             <Text style={styles.estiloTexto}>Custo de Orçamento </Text>
             <Text style={styles.estiloVariavel}>R$ {exibirCusto()}</Text>
             <TouchableOpacity style={styles.botao} title="Salvar" onPress={() => salvarProjeto()}>

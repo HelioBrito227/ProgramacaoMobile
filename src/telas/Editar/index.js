@@ -1,7 +1,7 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useState, useEffect } from "react";
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { getProjeto, getVariaveis, initDB, obterUltimoIdVariaveis, updateProjeto } from "../../dataBase/SQLiteManager";
+import { getProjeto, getVariavel, initDB, obterUltimoIdVariaveis, updateProjeto } from "../../dataBase/SQLiteManager";
 import NavBar from "../NavBar";
 import styles from "./style";
 
@@ -20,7 +20,6 @@ export default function Editar({ navigation, route }) {
     const [dataOrcamento, setDataOrcamento] = useState(formatarDataBrasil())
     const [custo, setCusto] = useState('')
     const [prazo, setPrazo] = useState('')
-    const [custoFerro, setCustoFerro] = useState('')
     const [custoDiaTrabalho, setCustoDiaTrabalho] = useState('')
     const [novoCustoDiaTrabalho, setNovoCustoDiaTrabalho] = useState('')
 
@@ -46,7 +45,7 @@ export default function Editar({ navigation, route }) {
     const carregarVariaveisSalvas = async () => {
         try {
             id = await obterUltimoIdVariaveis()
-            dados = await getVariaveis(id)
+            dados = await getVariavel(id)
             setCustoDiaTrabalho(dados[0].custo_dia_obra)
         } catch (error) {
             console.log("Erro ao carregar Variaveis: ", error)
@@ -106,7 +105,7 @@ export default function Editar({ navigation, route }) {
                 <Text style={styles.label}>Data de criação de orçamento:</Text>
                 <Text style={styles.variavel}>{dataOrcamento}</Text>
                 <Text style={styles.label}>Valor do dia de Trabalho Mais Recente:</Text>
-                <Text style={styles.variavel}>{custoDiaTrabalho}</Text>
+                <Text style={styles.variavel}>R$ {custoDiaTrabalho}</Text>
                 <Text style={styles.label}>Novo Valor de Dia de Trabalho a ser Utilizado:</Text>
                 <TextInput style={styles.estiloInput}
                     keyboardType="decimal-pad"

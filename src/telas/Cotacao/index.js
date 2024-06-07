@@ -1,31 +1,27 @@
 import React, { useCallback, useState } from "react";
 import { View, Text, SafeAreaView, TextInput, TouchableOpacity } from "react-native";
 import styles from "./style";
-import { initDB, getVariaveis, createVariaveis, obterUltimoIdVariaveis } from "../../dataBase/SQLiteManager";
+import { initDB, getVariavel, obterUltimoIdVariaveis, createVariavel } from "../../dataBase/SQLiteManager";
 import { useFocusEffect } from "@react-navigation/native";
 import NavBar from "../NavBar";
 
 export default function Cotacao({ navigation }) {
-
-    const [novoCustoFerro, setNovoCustoFerro] = useState('')
     const [novoCustoDiaTrabalho, setNovoCustoDiaTrabalho] = useState('')
-    const [custoFerro, setCustoFerro] = useState('')
     const [custoDiaTrabalho, setCustoDiaTrabalho] = useState('')
 
-    const carregarVariaveisSalvas = async () => {
+    const carregarVariavelSalva = async () => {
         try {
             id = await obterUltimoIdVariaveis()
-            dados = await getVariaveis(id)
+            dados = await getVariavel(id)
             setCustoDiaTrabalho(dados[0].custo_dia_obra)
-            setCustoFerro(dados[0].custo_ferro)
         } catch (error) {
-            console.log("Erro ao carregar Variaveis: ", error)
+            console.log("Erro ao carregar Variavel: ", error)
         }
     }
 
     useFocusEffect(
         useCallback(() => {
-            carregarVariaveisSalvas();
+            carregarVariavelSalva();
         }, [])
     );
 
@@ -34,7 +30,7 @@ export default function Cotacao({ navigation }) {
             console.log('banco de dados não inicializado!')
         } else {
             try {
-                await createVariaveis(novoCustoFerro, novoCustoDiaTrabalho);
+                await createVariavel(novoCustoDiaTrabalho);
                 console.log("Variáveis inseridas com sucesso!")
                 navigation.goBack();
             } catch (error) {
@@ -47,7 +43,7 @@ export default function Cotacao({ navigation }) {
         <SafeAreaView style={styles.conteudoPrincipal}>
             <View style={styles.container}>
                 <Text style={styles.label}>Valor do dia de Trabalho</Text>
-                <Text style={styles.variavel}>{!custoDiaTrabalho? "Não há custo de dia de Trabalho Salvo": custoDiaTrabalho}</Text>
+                <Text style={styles.variavel}>{!custoDiaTrabalho? "Não há custo de dia de Trabalho Salvo": "R$ "+custoDiaTrabalho}</Text>
                 <Text style={styles.label}>Novo Valor de Dia de Trabalho a ser Salvo</Text>
                 <TextInput style={styles.textInput}
                     keyboardType="decimal-pad"
